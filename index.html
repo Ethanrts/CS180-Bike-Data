@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CS180 Sleepers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="text">
+            <h1>Bike Trip Data</h1>
+            <h2>Search Users</h2>
+        </div>
+        <br>
+        <input type="search" placeholder="search" id="search">
+        <div class="dropdwn">
+            <button class="update">Update</button>
+            <div class="downupdate">
+                <a onclick="update_start_time()">start_time</a>
+                <a onclick="update_stop_time()">stop_time</a>
+                <a onclick="update_start_station_id()">start_station_id</a>
+                <a onclick="update_start_station_name()">start_station_name</a>
+                <a onclick="update_end_station_id()">end_station_id</a>
+                <a onclick="update_end_station_name()">end_station_name</a>
+                <a onclick="update_user_type()">user_type</a>
+                <a onclick="update_bike_id()">bike_id</a>
+                <a onclick="update_gender()">gender</a>
+                <a onclick="update_age()">age</a>
+                <a onclick="update_trip_duration()">trip_duration</a>
+            </div>
+        </div>
+        <button class="insert" onclick="insertTrip()">Insert</button>
+
+        <button class="delete" onclick="deleteTrip()">Delete</button>
+        <button class="analytics" id="analytics">Analytics</button>
+        <script type="text/javascript">
+            document.getElementById("analytics").onclick = function() {
+                location.href = "graph.html";
+            };
+        </script>
+
+        <div id="update"></div>
+        <div id="columnchart_values2" style="width: 900px; height: 300px;"></div>
+
+        <script>
+            var myExp;
+            var check;
+            var subTotal = 0;
+            var cusTotal = 0;
+            var json = [];
+            var subLength;
+            var cusLength;
+            var ageSubAverage;
+            var ageCusAverage;
+
+/*          
+            fetch('data2.json')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    
+                    json = data;
+                });
+*/
+
+            
+            /*.catch(function (err) {
+                console.log('error: ' + err);
+            });*/
+
+            var json = [{
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:12",
+                "start_station_id": "401",
+                "start_station_name": "Allen St & Rivington St",
+                "end_station_id": "360",
+                "end_station_name": "William St & Pine St",
+                "user_type": "Customer",
+                "bike_id": "17258",
+                "gender": "male",
+                "age": "24",
+                "trip_duration": "12.45"
+            }, {
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:08",
+                "start_station_id": "483",
+                "start_station_name": "E 12 St & 3 Ave",
+                "end_station_id": "368",
+                "end_station_name": "Carmine St & 6 Ave",
+                "user_type": "Subscriber",
+                "bike_id": "19692",
+                "gender": "male",
+                "age": "39",
+                "trip_duration": "8.28"
+            }, {
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:07",
+                "start_station_id": "3107",
+                "start_station_name": "Bedford Ave & Nassau Ave",
+                "end_station_id": "3076",
+                "end_station_name": "Scholes St & Manhattan Ave",
+                "user_type": "Customer",
+                "bike_id": "28285",
+                "gender": "male",
+                "age": "28",
+                "trip_duration": "7.75"
+            }, {
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:07",
+                "start_station_id": "3341",
+                "start_station_name": "Central Park West & W 102 St",
+                "end_station_id": "3400",
+                "end_station_name": "E 110 St & Madison Ave",
+                "user_type": "Subscriber",
+                "bike_id": "21000",
+                "gender": "female",
+                "age": "51",
+                "trip_duration": "8.05"
+            }, {
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:16",
+                "start_station_id": "3562",
+                "start_station_name": "Classon Ave & St Marks Ave",
+                "end_station_id": "3562",
+                "end_station_name": "Classon Ave & St Marks Ave",
+                "user_type": "Customer",
+                "bike_id": "32205",
+                "gender": "male",
+                "age": "25",
+                "trip_duration": "16.43"
+            }, {
+                "start_time": "5/31/2018 23:59",
+                "stop_time": "6/1/2018 0:02",
+                "start_station_id": "479",
+                "start_station_name": "9 Ave & W 45 St",
+                "end_station_id": "3635",
+                "end_station_name": "W 36 St & 9 Ave",
+                "user_type": "Subscriber",
+                "bike_id": "31327",
+                "gender": "male",
+                "age": "34",
+                "trip_duration": "3.15"
+            }]
+
+            function insertTrip() {
+
+                var start_time_insert = window.prompt("Enter start time: ");
+                var stop_time_insert = window.prompt("Enter stop time: ");
+                var start_station_id_insert = window.prompt("Enter start station id: ");
+                var start_station_name_insert = window.prompt("Enter start station name: ");
+                var end_station_id_insert = window.prompt("Enter end station id: ");
+                var end_station_name_insert = window.prompt("Enter end station name: ");
+                var user_type_insert = window.prompt("Enter user type: ");
+                var bike_id_insert = window.prompt("Enter bike id: ");
+                var gender_insert = window.prompt("Enter gender: ");
+                var age_insert = window.prompt("Enter age: ");
+                var trip_duration_insert = window.prompt("Enter trip duration: ");
+                alert("Attributes Inserted!");
+
+                json.push({
+                    start_time: start_time_insert,
+                    stop_time: stop_time_insert,
+                    start_station_id: start_station_id_insert,
+                    start_station_name: start_station_name_insert,
+                    end_station_id: end_station_id_insert,
+                    end_station_name: end_station_name_insert,
+                    user_type: user_type_insert,
+                    bike_id: bike_id_insert,
+                    gender: gender_insert,
+                    age: age_insert,
+                    trip_duration: trip_duration_insert
+                })
+            }
+
+
+
+            $('#search').keyup(function() {
+                var searchField = $('#search').val();
+                myExp = new RegExp(searchField, "i");
+                check = searchField;
+                $.getJSON('data.json', function(data) {
+                    var output = '<ul class="searchresults">';
+                    $.each(json, function(key, val) {
+                        if ((val.bike_id.search(myExp) != -1)) {
+                            output += '<li>';
+                            output += '<h2>' + val.bike_id + '</h2>' + start_time + '</h2>' + stop_time + '</h2>' + start_station_id + '</h2>' + start_station_name + '</h2>' + end_station_id + '</h2>' + end_station_name + '</h2>' + user_type + '</h2>' + gender + '</h2>' + age + '</h2>' + trip_duration + '</h2>';
+                            output += '</li>';
+                        }
+                    });
+                    output += '</ul>';
+                    $('#update').html(output);
+                });
+            });
+
+            function deleteTrip() {
+                for (let [i, data] of json.entries()) {
+                    if (json[i].start_time == check || json[i].stop_time == check || json[i].start_station_id == check || json[i].start_station_name == check || json[i].end_station_id == check || json[i].end_station_name == check || json[i].user_type == check || json[i].bike_id == check || json[i].gender == check || json[i].age == check || json[i].trip_duration == check) {
+                        json.splice(i, 1);
+                        alert("Attribute Deleted!");
+                        for (i = 0; i < json.length; i++) {
+                            console.log(json[i]);
+                        }
+                    }
+                }
+            }
+
+
+
+            function update_start_time() {
+                var old_start_time = window.prompt("Enter old start time: ");
+                var new_start_time = window.prompt("Enter new start time: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].start_time == old_start_time) {
+                        json[i].start_time = new_start_time.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_stop_time() {
+                var old_stop_time = window.prompt("Enter old stop time: ");
+                var new_stop_time = window.prompt("Enter new stop time: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].stop_time == old_stop_time) {
+                        json[i].stop_time = new_stop_time.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_start_station_id() {
+                var old_start_station_id = window.prompt("Enter old start station id: ");
+                var new_start_station_id = window.prompt("Enter new start station id: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].start_station_id == old_start_station_id) {
+                        json[i].start_station_id = start_station_id_new.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_start_station_name() {
+                var old_start_station_name = window.prompt("Enter old start station name: ");
+                var new_start_station_name = window.prompt("Enter new start station name: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].start_station_name == old_start_station_name) {
+                        json[i].start_station_name = start_station_name_new.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_end_station_name() {
+                var old_end_station_name = window.prompt("Enter old end station name: ");
+                var new_end_station_name = window.prompt("Enter new end station name: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].end_station_name == old_end_station_name) {
+                        json[i].end_station_name = end_station_name_new.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_end_station_id() {
+                var old_end_station_id = window.prompt("Enter old end station id: ");
+                var new_end_station_id = window.prompt("Enter new end station id: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].end_station_id == old_end_station_id) {
+                        json[i].end_station_id = end_station_id_new.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_user_type() {
+                var old_user_type = window.prompt("Enter old user type: ");
+                var new_user_type = window.prompt("Enter new user type: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].user_type == old_user_type) {
+                        json[i].user_type = new_user_type.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_bike_id() {
+                var old_bike_id = window.prompt("Enter old bike id: ");
+                var new_bike_id = window.prompt("Enter new bike id: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].bike_id == old_bike_id) {
+                        json[i].bike_id = new_bike_id.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_gender() {
+                var old_gender = window.prompt("Enter old gender: ")
+                var new_gender = window.prompt("Enter new gender: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].gender == old_gender) {
+                        json[i].gender = new_gender.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_age() {
+                var old_age = window.prompt("Enter old age: ");
+                var new_age = window.prompt("Enter new age: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].age == old_age) {
+                        json[i].age = new_age.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            function update_trip_duration() {
+                var old_trip_duration = window.prompt("Enter old trip duration: ");
+                var new_trip_duration = window.prompt("Enter new trip duration: ");
+                for (let [i, data] of json.entries()) {
+                    if (json[i].trip_duration == old_trip_duration) {
+                        json[i].trip_duration = new_trip_duration.toString();
+                        console.log(json[i]);
+                        break;
+                    }
+                }
+            }
+
+            for (let [i, data] of json.entries()) {
+
+                //length += 1;
+                var round = Math.round;
+
+                if (json[i].user_type == "Subscriber") {
+                    console.log("hi");
+
+                    var newSubAge = Number(json[i].age);
+                    subLength += 1;
+                    
+                }
+                if (json[i].user_type == "Customer") {
+
+                    console.log("hi2");
+                    var newCustAge = Number(json[i].age);
+                    cusLength += 1;
+                    
+                }
+
+
+                subTotal += newSubAge;
+                cusTotal += newCustAge;
+                console.log(subLength);
+
+            }
+            
+            ageSubAverage = (subTotal/subLength);
+            ageCusAverage = (cusTotal/cusLength);
+            
+
+        </script>
+
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {
+        packages: ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ["Element", "Average Age", {
+                role: "style"
+            }],
+            ["Subscriber", ageSubAverage, "#b87333"],
+            ["Customer", ageCusAverage, "#b87333"]
+        ]);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1, {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2
+        ]);
+
+        var options = {
+            title: "Average Age",
+            width: 600,
+            height: 400,
+            bar: {
+                groupWidth: "95%"
+            },
+            legend: {
+                position: "none"
+            },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values2"));
+        chart.draw(view, options);
+    }
+</script>
+
+</body>
+
+</html>

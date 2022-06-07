@@ -1,0 +1,234 @@
+html,
+body {
+    background-color: #fff;
+    font-family: sans-serif;
+    overflow-x: hidden !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    scroll-padding-top: 50px;
+    scroll-behavior: smooth;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+
+/* Search Bar Styling */
+
+.wrapper {
+    position: relative;
+    z-index: 100;
+}
+
+.graph {
+    position: relative;
+    z-index: 100;
+    text-align: center;
+    align-items: center;
+    padding-top: 40px;
+}
+
+.wrapper h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    text-align: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+.graphana {
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    text-align: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+.wrapper h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+#search {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 50px;
+    padding: 17px;
+    padding-left: 55px;
+    border: 1px solid rgb(210, 209, 209);
+    font-size: 13px;
+    color: gray;
+    background-image: url('./images/search1.png');
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    outline: 0;
+    z-index: 100;
+    position: relative;
+}
+
+#search:hover,
+#search:focus {
+    border: 1.5px solid rgb(185, 183, 183);
+    background-color: white;
+    z-index: 100;
+}
+
+
+/* End of Search Bar Styling */
+
+
+/* Style The Dropdown Button */
+
+.update {
+    background-color: blanchedalmond;
+    color: black;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.insert {
+    background-color: blanchedalmond;
+    color: black;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    margin: 1%;
+    z-index: 0;
+}
+
+.delete {
+    background-color: blanchedalmond;
+    color: black;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    margin: 1%;
+    z-index: 0;
+}
+
+.analytics {
+    background-color: blanchedalmond;
+    color: black;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    margin: 1%;
+    z-index: 0;
+}
+
+
+/* The container <div> - needed to position the dropdown content */
+
+.dropdwn {
+    position: relative;
+    display: inline-block;
+    margin-left: 5%;
+    margin-right: 1%;
+    z-index: 1000;
+}
+
+.insert:hover {
+    background-color: #abc4ff;
+}
+
+.delete:hover {
+    background-color: #abc4ff;
+}
+
+.analytics:hover {
+    background-color: #abc4ff;
+}
+
+
+/* Dropdown Content (Hidden by Default) */
+
+.downupdate {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+
+/* Links inside the dropdown */
+
+.downupdate a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+
+/* Change color of dropdown links on hover */
+
+.downupdate a:hover {
+    background-color: #f1f1f1;
+}
+
+
+/* Show the dropdown menu on hover */
+
+.dropdwn:hover .downupdate {
+    display: block;
+}
+
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+
+.dropdwn:hover .update {
+    background-color: #abc4ff;
+}
+
+
+/* Graph Page */
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.graph {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 100;
+    padding-top: 40px;
+}
+
+.graphana {
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    text-align: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+.column {
+    flex: 0 0 50%;
+    padding: 10px;
+}
